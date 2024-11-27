@@ -7,6 +7,7 @@ import {
   ScriptTarget,
 } from 'typescript';
 
+// FYI: Pass test-specific compilation options if needed
 export function getCompilationErrors(pathToFile: string): string[] {
   const program = createProgram([pathToFile], {
     target: ScriptTarget.ESNext,
