@@ -6,8 +6,7 @@
   "scripts": {
     "verify": "tsx cli/verify.ts",
     "list": "tsx cli/list.ts",
-    "internal:build": "tsc",
-    "internal:test": "vitest"
+    "_internal:test": "vitest --run tasks/core-pro/000-intro"
   },
   "author": "Przeprogramowani",
   "license": "ISC",

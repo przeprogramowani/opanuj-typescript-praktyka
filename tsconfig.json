@@ -11,10 +11,6 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "types": ["node", "prompts", "execa"],
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/utils/*": ["utils/*"]
-    }
+    "noEmit": true
   }
 }
