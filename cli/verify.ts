@@ -1,23 +1,27 @@
 import { glob } from 'glob';
-import { compileTask } from './scripts/compile-task.ts';
+import { startTest } from './scripts/test-runner';
+import { Command } from 'commander';
 
-try {
-  const [, , task] = process.argv;
+const program = new Command();
 
-  if (!task) {
-    console.error('👉 Przekaż nazwę zadania jako argument, np. "npm run verify type-filtering"');
-    process.exit(1);
-  }
+program
+  .name('verify')
+  .description('Weryfikacja zadania')
+  .argument('<task>', 'Nazwa zadania do weryfikacji')
+  .action(async (task) => {
+    try {
+      const paths = await glob(`tasks/**/${task}`);
 
-  const paths = await glob(`tasks/**/${task}`);
+      if (paths.length === 0) {
+        console.error(`👉 Upewnij się, że zadanie o nazwie "${task}" istnieje`);
+        process.exit(1);
+      }
 
-  if (paths.length === 0) {
-    console.error(`👉 Upewnij się, że zadanie o nazwie "${task}" istnieje`);
-    process.exit(1);
-  }
+      await startTest(`${paths[0]}`);
+    } catch (error) {
+      console.error(`\n❌ Nieoczekiwany błąd :(\n\n ${error}`);
+      process.exit(1);
+    }
+  });
 
-  await compileTask(`${paths[0]}/${task}.ts`);
-} catch (error) {
-  console.error(`\n❌ Nieoczekiwany błąd :(\n\n ${error}`);
-  process.exit(1);
-}
+program.parse();

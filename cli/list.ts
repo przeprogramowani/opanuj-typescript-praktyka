@@ -1,35 +1,38 @@
-import prompts from 'prompts';
+import { Command } from 'commander';
 import { glob } from 'glob';
-import { compileTask } from './scripts/compile-task.ts';
+import prompts from 'prompts';
+import { startTest } from './scripts/test-runner';
 
-const [, , courseName] = process.argv;
+const program = new Command();
 
-if (!courseName) {
-  console.error('👉 Przekaż nazwę modułu, np. "npm run list core-pro"');
-  process.exit(1);
-}
+program
+  .name('list')
+  .description('Uruchamianie zadań z wybranego modułu')
+  .argument('[course]', 'Nazwa modułu', 'core-pro')
+  .action(async (course: string) => {
+    try {
+      const coursePath = `tasks/${course}/*`;
+      const folders = await glob(coursePath);
 
-const coursePath = `tasks/${courseName}/*`;
+      if (folders.length === 0) {
+        console.error(`👉 Nie znaleziono modułu o nazwie "${course}"`);
+        process.exit(1);
+      }
 
-try {
-  const folders = await glob(coursePath);
+      const taskNames = folders.map((folder) => folder.split('/').pop()) as string[];
 
-  if (folders.length === 0) {
-    console.error(`👉 Nie znaleziono modułu o nazwie "${courseName}"`);
-    process.exit(1);
-  }
+      const { task } = await prompts({
+        type: 'select',
+        name: 'task',
+        message: '🔍 Wybierz zadanie do weryfikacji:',
+        choices: taskNames.map((task) => ({ title: task, value: task })),
+      });
 
-  const taskNames = folders.map((folder) => folder.split('/').pop()) as string[];
-
-  const { task } = await prompts({
-    type: 'select',
-    name: 'task',
-    message: '🔍 Wybierz zadanie do weryfikacji:',
-    choices: taskNames.map((task) => ({ title: task, value: task })),
+      await startTest(`tasks/${course}/${task}`);
+    } catch (error) {
+      console.error(`\n❌ Nieoczekiwany błąd :(\n\n ${error}`);
+      process.exit(1);
+    }
   });
 
-  await compileTask(`tasks/${courseName}/${task}/${task}.ts`);
-} catch (error) {
-  console.error(`\n❌ Nieoczekiwany błąd :(\n\n ${error}`);
-  process.exit(1);
-}
+program.parse();

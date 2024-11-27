@@ -1,11 +1,20 @@
 {
-  "extends": "@tsconfig/node20/tsconfig.json",
-  "include": ["cli/*.ts", "cli/scripts/*.ts", "tasks/**/*.ts"],
+  "include": ["tasks/**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "allowImportingTsExtensions": true,
-    "types": ["node", "prompts"],
-    "noEmit": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["node", "prompts", "execa"],
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/utils/*": ["utils/*"]
+    }
   }
 }
