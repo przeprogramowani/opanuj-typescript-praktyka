@@ -20,12 +20,15 @@ program
       }
 
       const taskNames = folders.map((folder) => folder.split('/').pop()) as string[];
+      const choices = taskNames
+        .map((task) => ({ title: task, value: task }))
+        .sort((a, b) => a.title.localeCompare(b.title));
 
       const { task } = await prompts({
         type: 'select',
         name: 'task',
         message: '🔍 Wybierz zadanie do weryfikacji:',
-        choices: taskNames.map((task) => ({ title: task, value: task })),
+        choices,
       });
 
       await startTest(`tasks/${course}/${task}`);
