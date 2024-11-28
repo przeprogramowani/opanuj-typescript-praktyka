@@ -1,5 +1,5 @@
 import { glob } from 'glob';
-import { startTest } from './scripts/test-runner';
+import { startTest } from './scripts/test-runner.ts';
 import { Command } from 'commander';
 
 const program = new Command();

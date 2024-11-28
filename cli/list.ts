@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { glob } from 'glob';
 import prompts from 'prompts';
-import { startTest } from './scripts/test-runner';
+import { startTest } from './scripts/test-runner.ts';
 
 const program = new Command();
 
