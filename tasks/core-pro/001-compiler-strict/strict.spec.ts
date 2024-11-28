@@ -4,7 +4,7 @@ import { join } from 'path';
 
 describe('Strict mode', () => {
   it('should compile when strict mode is enabled', () => {
-    const diagnostics = getCompilerDiagnostics(join(__dirname, 'task.ts'));
+    const diagnostics = getCompilerDiagnostics(join(__dirname, 'user-management.ts'));
     expect(diagnostics).toConfirmCompilation();
   });
 });

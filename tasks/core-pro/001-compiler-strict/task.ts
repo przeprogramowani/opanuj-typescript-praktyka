@@ -1,62 +1,35 @@
-class BuggyUserService {
-  private database;
+export class UserModule {
+  private users = [];
 
-  processUserData(data) {
-    function innerFunction() {
-      return this.database.process(data);
-    }
-
-    return innerFunction();
+  addUser(user) {
+    this.users.push(user);
   }
 
-  async getUserSettings(userId: string) {
-    const user = await this.fetchUser(userId);
-    return user.settings.theme;
-  }
-
-  private handlers: Array<(error: Error) => void> = [];
-
-  setErrorHandler(handler: (error: string) => void) {
-    this.handlers.push(handler);
-  }
-
-  processUsers(users: any[]) {
-    const boundProcess = this.processUser.bind(this);
-    users.forEach((user) => boundProcess(user));
-  }
-
-  private processUser(user: any, index: number) {
-    console.log(index, user);
-  }
-
-  async dangerousOperation() {
-    try {
-      await this.riskyCall();
-    } catch (error) {
-      console.log(error.message);
+  removeUser(userId) {
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].id == userId) {
+        this.users.splice(i, 1);
+        break;
+      }
     }
   }
 
-  async updateUserPreferences(userId, preferences) {
-    const user = await this.fetchUser(userId);
-
-    user.preferences = {
-      ...user.preferences,
-      ...preferences,
-    };
-
-    return this.database.save(user);
+  getUser(userId) {
+    for (let user of this.users) {
+      if (user.id == userId) {
+        return user;
+      }
+    }
+    return null;
   }
 
-  private async fetchUser(id) {
-    return this.database.findOne({ id });
-  }
-
-  private async riskyCall() {
-    throw new Error('Something went wrong');
+  filterUsers(filterFn) {
+    return this.users.filter((user) => {
+      let result = filterFn(user);
+      return result.isValid;
+    });
   }
 }
 
-const service = new BuggyUserService();
-
-service.processUserData({ name: 'John' });
+const userModule = new UserModule();
+export const { addUser, removeUser, getUser, filterUsers } = userModule;
