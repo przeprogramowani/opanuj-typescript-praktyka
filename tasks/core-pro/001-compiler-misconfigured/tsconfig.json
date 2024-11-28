@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "moduleResolution": "node10",
+    "allowImportingTsExtensions": true,
+    "esModuleInterop": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "strict": true
+  }
+}

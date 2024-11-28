@@ -11,6 +11,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "types": ["node", "prompts", "execa"],
-    "noEmit": true
+    "noEmit": true,
+    "strict": true
   }
 }
