@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { getCompilerDiagnostics } from '../../../utils/ts-utils.ts';
 import { join } from 'path';
-import { swap } from './task.ts';
+import { swapBox } from './task.ts';
 
 describe('Generic swap', () => {
   it('should compile when implemented', () => {
@@ -10,12 +10,17 @@ describe('Generic swap', () => {
   });
 
   it('should allow me to swap numbers', () => {
-    const swapped = swap(10, 100);
+    const swapped = swapBox(10, 100);
     expect(swapped).toEqual([100, 10]);
   });
 
   it('should allow me to swap strings', () => {
-    const swapped = swap('world', 'hello');
+    const swapped = swapBox('world', 'hello');
     expect(swapped).toEqual(['hello', 'world']);
+  });
+
+  it('should allow me to swap booleans', () => {
+    const swapped = swapBox(false, true);
+    expect(swapped).toEqual([true, false]);
   });
 });
