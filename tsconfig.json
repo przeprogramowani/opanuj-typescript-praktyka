@@ -1,5 +1,5 @@
 {
-  "include": ["tasks/**/*.ts"],
+  "include": ["utils/*.ts", "utils/**/*.ts", "cli/**/*.ts", "tasks/**/**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "target": "ESNext",
