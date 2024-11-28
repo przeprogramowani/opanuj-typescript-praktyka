@@ -1,6 +1,6 @@
 import { startVitest } from 'vitest/node';
 
-function getTaskName(pathToTask) {
+function getTaskName(pathToTask: string) {
   return pathToTask.split('/').pop();
 }
 
@@ -17,7 +17,7 @@ async function runVitest(pathToTask: string) {
   return testResults === 'pass';
 }
 
-export async function startTest(pathToTask) {
+export async function startTest(pathToTask: string) {
   try {
     console.log(`\n👉 Sprawdzam zadanie "${pathToTask}"...`);
 
