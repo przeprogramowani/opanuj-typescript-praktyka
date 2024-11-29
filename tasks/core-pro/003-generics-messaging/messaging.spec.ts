@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { getCompilerDiagnostics } from '../../../utils/ts-utils.ts';
 import { join } from 'path';
-import { InventoryStockTracker, MessageBus, OrderCancelledMessage, OrderCreatedMessage } from './messaging.ts';
+import { InventoryStockTracker, MessageBus, OrderCancelledMessage, OrderCreatedMessage } from './task.ts';
 
 describe('Generic Message Bug', () => {
   it('should compile', () => {
-    const diagnostics = getCompilerDiagnostics(join(__dirname, './messaging.ts'));
+    const diagnostics = getCompilerDiagnostics(join(__dirname, './task.ts'));
     expect(diagnostics).toConfirmCompilation();
   });
 
