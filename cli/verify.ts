@@ -8,7 +8,8 @@ program
   .name('verify')
   .description('Weryfikacja zadania')
   .argument('<task>', 'Nazwa zadania do weryfikacji')
-  .action(async (task) => {
+  .option('-w, --watch', 'Uruchamia testy w trybie obserwatora', false)
+  .action(async (task, options: { watch: boolean }) => {
     try {
       const paths = await glob(`tasks/**/${task}`);
 
@@ -17,7 +18,7 @@ program
         process.exit(1);
       }
 
-      await startTest(`${paths[0]}`);
+      await startTest(`${paths[0]}`, { watch: options.watch });
     } catch (error) {
       console.error(`\n❌ Nieoczekiwany błąd :(\n\n ${error}`);
       process.exit(1);

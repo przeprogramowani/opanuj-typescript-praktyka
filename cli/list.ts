@@ -9,7 +9,8 @@ program
   .name('list')
   .description('Uruchamianie zadań z wybranego modułu')
   .argument('[course]', 'Nazwa modułu', 'core-pro')
-  .action(async (course: string) => {
+  .option('-w, --watch', 'Uruchamia testy w trybie obserwatora', false)
+  .action(async (course: string, options: { watch: boolean }) => {
     try {
       const coursePath = `tasks/${course}/*`;
       const folders = await glob(coursePath);
@@ -31,7 +32,12 @@ program
         choices,
       });
 
-      await startTest(`tasks/${course}/${task}`);
+      if (!task) {
+        console.error('👉 Nie wybrano zadania do weryfikacji');
+        process.exit(1);
+      }
+
+      await startTest(`tasks/${course}/${task}`, { watch: options.watch });
     } catch (error) {
       console.error(`\n❌ Nieoczekiwany błąd :(\n\n ${error}`);
       process.exit(1);

@@ -20,10 +20,22 @@ npm install
 npm run list core-pro
 ```
 
+Tryb obserwatora:
+
+```bash
+npm run list core-pro -- --watch
+```
+
 ### 🔍 Uruchomienie zadania wg nazwy
 
 ```bash
-npm run verify type-filtering
+npm run verify 004-literals-code
+```
+
+Tryb obserwatora:
+
+```bash
+npm run verify 004-literals-code -- --watch
 ```
 
 ### 📊 Dashboard z podsumowaniem testów
