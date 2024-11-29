@@ -17,5 +17,7 @@ describe('Mapped Types', () => {
     });
 
     expect(accessMetadata.homepage).toEqual(true);
+    expect(accessMetadata.about).toEqual(true);
+    expect(accessMetadata.contact).toEqual(true);
   });
 });
