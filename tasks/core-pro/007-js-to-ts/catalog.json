@@ -1,0 +1,20 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "XHeadphones Pro",
+      "price": 149
+    },
+    {
+      "id": 2,
+      "name": "Display Ultra",
+      "price": 1899
+    },
+    {
+      "id": 3,
+      "name": "Watch ProX",
+      "price": 299,
+      "refurbished": true
+    }
+  ]
+}
