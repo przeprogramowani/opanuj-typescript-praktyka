@@ -6,8 +6,7 @@ Obecna implementacja używa prostego type guard, który nie wykorzystuje pełni 
 Twoim zadaniem jest:
   1. Dodaj nowy typ powiadomienia: 'SystemNotification' z polem 'log: string'.
   2. Rozbuduj funkcję getNotificationText tak, aby zwracała odpowiedni tekst dla każdego typu powiadomienia.
-  3. Zabezpiecz funkcję getNotificationText przed niewłaściwym typem powiadomienia, zwracając "Unknown notification".
-  4. Dodaj powiadomienie systemowe do tablicy notifications i sprawdź, czy funkcja getNotificationText działa poprawnie.
+  3. Zabezpiecz funkcję getNotificationText przed niewłaściwym typem powiadomienia, zwracając "Unknown notification"
 */
 
 type EmailNotification = {
