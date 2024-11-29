@@ -1,11 +1,15 @@
 import { startVitest } from 'vitest/node';
 
+interface TestOptions {
+  watch: boolean;
+}
+
 function getTaskName(pathToTask: string) {
   return pathToTask.split('/').pop();
 }
 
-async function runVitest(pathToTask: string) {
-  const vitest = await startVitest('test', [pathToTask], { run: true, watch: false });
+async function runVitest(pathToTask: string, options: TestOptions) {
+  const vitest = await startVitest('test', [pathToTask], { run: !options.watch, watch: options.watch });
 
   if (!vitest) {
     throw new Error(`❌ Nie udało się uruchomić testów - poinformuj nas o tym."`);
@@ -17,11 +21,11 @@ async function runVitest(pathToTask: string) {
   return testResults === 'pass';
 }
 
-export async function startTest(pathToTask: string) {
+export async function startTest(pathToTask: string, options: TestOptions = { watch: false }) {
   try {
     console.log(`\n👉 Sprawdzam zadanie "${pathToTask}"...`);
 
-    const isTestPassed = await runVitest(pathToTask);
+    const isTestPassed = await runVitest(pathToTask, options);
 
     if (isTestPassed) {
       console.log(`\n✅ Gratulacje! Zadanie "${getTaskName(pathToTask)}" zaliczone!`);
