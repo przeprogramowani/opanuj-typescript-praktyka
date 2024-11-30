@@ -1,1 +1,1 @@
-export type RewardRadar<T> = string;
+export type RewardRadar = '🔍';
