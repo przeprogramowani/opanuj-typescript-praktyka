@@ -11,7 +11,8 @@ describe('Key loop', () => {
 
   it('should use proper operator(s) to get type details', () => {
     const fileContent = readFileSync(join(__dirname, 'task.ts'), 'utf8');
-    const expectedOperator = Buffer.from('6B65796F66207479706560F66', 'hex').toString(); // encoded operator(s) to prevent spoiler
+    const expectedOperator = Buffer.from('6b65796f662074797065', 'hex').toString().trim(); // encoded operator(s) to prevent spoiler
+
     try {
       expect(fileContent.includes(expectedOperator)).toBe(true);
     } catch {
