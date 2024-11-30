@@ -1,5 +1,5 @@
 /* Zmień sposób upewnienia się, że obiekt shapes jest zgodny z typem Record<string, Shape>
-  Tak aby utrzymać szczegółowe informacje o obiektach przy odwoływaniu się do nich.
+  Wykorzytaj technikę, która zachowa szczegółowe informacje o obiektach przy odwoływaniu się do nich.
 */
 
 type Rectangle = { kind: 'rectangle'; width: number; height: number };
