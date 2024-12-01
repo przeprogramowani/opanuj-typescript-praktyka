@@ -1,0 +1,1 @@
+window.analytics.trackEvent('submit');
