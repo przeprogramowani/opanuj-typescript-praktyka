@@ -1,3 +1,4 @@
+import { readdirSync } from 'fs';
 import path from 'path';
 import {
   CompilerOptions,
@@ -31,9 +32,19 @@ const getTsConfig = (searchPath?: string): CompilerOptions => {
   return options;
 };
 
-export function getCompilerDiagnostics(pathToFile: string, inlineOptions?: CompilerOptions): string[] {
+export function getCompilerDiagnostics(
+  pathToFile: string,
+  inlineOptions?: CompilerOptions,
+): string[] {
   const tsConfigOptions = getTsConfig(pathToFile);
-  const program = createProgram([pathToFile], {
+  const fileDir = path.dirname(pathToFile);
+  const declarationFiles = readdirSync(fileDir)
+    .filter((file) => file.endsWith('.d.ts'))
+    .map((file) => path.join(fileDir, file));
+
+  const filesToInclude = [pathToFile, ...declarationFiles];
+
+  const program = createProgram(filesToInclude, {
     ...tsConfigOptions,
     ...inlineOptions,
   });
