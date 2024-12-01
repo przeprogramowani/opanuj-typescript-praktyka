@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["node", "prompts", "execa"],
+    "types": ["node", "prompts"],
     "noEmit": true,
     "strict": true
   }
