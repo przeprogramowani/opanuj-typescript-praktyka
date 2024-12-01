@@ -1,4 +1,4 @@
-// Wykorzystaj odpowiednie mechanizmy TypeScript, aby uzyskać szczegółowe informacje o kluczach "key" wewnątrz pętli for...in
+// Wykorzystaj odpowiednie mechanizmy TypeScript, aby uzyskać szczegółowe informacje o kluczach obiektu wewnątrz pętli for...of
 
 const configurations = {
   apiEndpoint: 'https://api.example.com',
