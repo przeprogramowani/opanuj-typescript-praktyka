@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'fs';
+import { promises as fsPromises, readdirSync } from 'fs';
 import { join } from 'path';
 import { describe, expect, it } from 'vitest';
 import { getCompilerDiagnostics } from '../../../utils/ts-utils.ts';
@@ -23,8 +23,8 @@ describe('Extended global window', () => {
     }
 
     try {
-      let hasGlobalDeclaration = declarationFiles.some((file) => {
-        const fileContent = readFileSync(join(__dirname, file), 'utf8');
+      let hasGlobalDeclaration = declarationFiles.some(async (file) => {
+        const fileContent = await fsPromises.readFile(join(__dirname, file), 'utf8');
         const expectedOperator = Buffer.from('6465636c61726520676c6f62616c', 'hex')
           .toString()
           .trim(); // encoded operator(s) to prevent spoiler
@@ -40,8 +40,8 @@ describe('Extended global window', () => {
     }
   });
 
-  it('should not use local declaration to extend window', () => {
-    const taskContent = readFileSync(join(__dirname, 'task.ts'), 'utf8');
+  it('should not use local declaration to extend window', async () => {
+    const taskContent = await fsPromises.readFile(join(__dirname, 'task.ts'), 'utf8');
     const expectedOperator = Buffer.from('6465636c61726520636f6e73742077696e646f77', 'hex')
       .toString()
       .trim(); // encoded operator(s) to prevent spoiler

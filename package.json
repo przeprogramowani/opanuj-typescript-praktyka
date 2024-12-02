@@ -6,7 +6,7 @@
   "scripts": {
     "verify": "tsx cli/verify.ts",
     "list": "tsx cli/list.ts",
-    "raport:json": "vitest --run --silent --reporter=json --outputFile utils/progress/data/results.json || echo ''",
+    "raport:json": "vitest --run --silent --no-coverage --pool=forks --poolOptions.forks.isolate=false --sequence.concurrent=true --reporter=json --outputFile utils/progress/data/results.json || echo ''",
     "raport:json:serve": "vite utils/progress --port 3100",
     "raport:html": "vitest --run --silent --reporter=html || echo ''",
     "raport:html:serve": "vite preview --outDir html --port 3100",

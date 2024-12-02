@@ -18,11 +18,11 @@ const LEVEL_DEFINITIONS = {
   431: { name: 'Algebra typów', level: 4 },
   441: { name: 'Algebra typów', level: 4 },
   442: { name: 'Algebra typów', level: 4 },
-  611: { name: 'Moduły i projekty', level: 6 },
-  621: { name: 'Moduły i projekty', level: 6 },
-  622: { name: 'Moduły i projekty', level: 6 },
-  631: { name: 'Moduły i projekty', level: 6 },
-  632: { name: 'Moduły i projekty', level: 6 },
+  611: { name: 'Wzorce w pracy z typami', level: 6 },
+  621: { name: 'Wzorce w pracy z typami', level: 6 },
+  622: { name: 'Wzorce w pracy z typami', level: 6 },
+  631: { name: 'Wzorce w pracy z typami', level: 6 },
+  632: { name: 'Wzorce w pracy z typami', level: 6 },
   731: { name: 'JavaScript - Integracje', level: 7 },
 };
 

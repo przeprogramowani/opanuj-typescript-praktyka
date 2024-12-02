@@ -1,4 +1,5 @@
-import { readdirSync, readFileSync } from 'fs';
+import { promises as fsPromises, readdirSync } from 'fs';
+
 import { join } from 'path';
 import { describe, expect, it } from 'vitest';
 import { getCompilerDiagnostics } from '../../../utils/ts-utils.ts';
@@ -9,8 +10,8 @@ describe('Extended local window', () => {
     expect(diagnostics).toConfirmCompilation();
   });
 
-  it('should use local declaration to extend window', () => {
-    const fileContent = readFileSync(join(__dirname, 'task.ts'), 'utf8');
+  it('should use local declaration to extend window', async () => {
+    const fileContent = await fsPromises.readFile(join(__dirname, 'task.ts'), 'utf8');
     const expectedOperator = Buffer.from('6465636c61726520636f6e73742077696e646f77', 'hex')
       .toString()
       .trim(); // encoded operator(s) to prevent spoiler
@@ -22,7 +23,7 @@ describe('Extended local window', () => {
     }
   });
 
-  it('should not use global declaration to extend window', () => {
+  it('should not use global declaration to extend window', async () => {
     const files = readdirSync(__dirname);
     const declarationFiles = files.filter((file) => file.endsWith('.d.ts'));
 
@@ -30,7 +31,7 @@ describe('Extended local window', () => {
       throw new Error('You should not use global declaration to extend window in this task');
     }
 
-    const taskContent = readFileSync(join(__dirname, 'task.ts'), 'utf8');
+    const taskContent = await fsPromises.readFile(join(__dirname, 'task.ts'), 'utf8');
     const expectedOperator = Buffer.from('6465636c61726520676c6f62616c', 'hex').toString().trim(); // encoded operator(s) to prevent spoiler
 
     try {
