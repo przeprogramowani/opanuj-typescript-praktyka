@@ -40,6 +40,14 @@ npm run verify 004-literals-code -- --watch
 
 ### 📊 Dashboard z podsumowaniem testów
 
+Podgląd wyników testów:
+
 ```bash
 npm run summary
+```
+
+Podgląd szczegółów testów:
+
+```bash
+npm run summary:vitest
 ```
