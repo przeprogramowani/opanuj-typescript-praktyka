@@ -37,7 +37,12 @@ async function fetchResults() {
 }
 
 function renderOverallProgress(results) {
-  const progressPercentage = Math.round((results.numPassedTests / results.numTotalTests) * 100);
+  const challenges = getAllChallenges(results);
+  const completedChallenges = challenges.filter(
+    (challenge) => challenge.status === 'complete',
+  ).length;
+  const totalChallenges = challenges.length;
+  const progressPercentage = Math.round((completedChallenges / totalChallenges) * 100);
 
   const progressHtml = `
     <div class="bg-slate-800/50 border border-blue-500 p-8 rounded-2xl">
@@ -48,7 +53,7 @@ function renderOverallProgress(results) {
         </div>
         <div class="text-right">
           <span class="text-blue-400 font-semibold text-3xl block">${progressPercentage}%</span>
-          <span class="text-gray-400 text-sm font-light">${results.numPassedTests}/${results.numTotalTests} testów zaliczonych</span>
+          <span class="text-gray-400 text-sm font-light">${completedChallenges}/${totalChallenges} zadań zaliczonych</span>
         </div>
       </div>
       <div class="bg-black/30 rounded-full h-3 w-full overflow-hidden">
