@@ -40,7 +40,7 @@ function renderOverallProgress(results) {
   const progressPercentage = Math.round((results.numPassedTests / results.numTotalTests) * 100);
 
   const progressHtml = `
-    <div class="bg-slate-800/50 border border-gray-800 p-8 rounded-2xl">
+    <div class="bg-slate-800/50 border border-blue-500 p-8 rounded-2xl">
       <div class="flex justify-between items-center mb-6">
         <div>
           <span class="text-white text-lg font-medium tracking-wide block mb-1">Progress Tracker</span>
