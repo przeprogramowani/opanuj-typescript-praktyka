@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
+import './index.css';
 import RootApp from './RootApp';
 
 // Dynamically import all App.tsx files within tasks/react-pro
@@ -49,3 +50,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </Routes>
   </BrowserRouter>,
 );
+
+document.documentElement.classList.add('loading-complete');

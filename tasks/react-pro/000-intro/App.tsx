@@ -12,7 +12,7 @@ const App = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
+    <div className="p-4 text-center text-3xl">
       <h1>Welcome to 000-intro</h1>
       <p>Current count: {count}</p>
       <button
