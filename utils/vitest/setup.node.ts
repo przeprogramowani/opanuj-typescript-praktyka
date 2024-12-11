@@ -1,4 +1,4 @@
-import { expect } from 'vitest';
+import { afterAll, expect } from 'vitest';
 
 expect.extend({
   toConfirmCompilation(received: string[]) {
@@ -11,4 +11,9 @@ expect.extend({
           : `\n🚨 Wykryto następujące błędy kompilacji:\n\n${received.join('\n')}\n`,
     };
   },
+});
+
+afterAll(({ file, tasks }) => {
+  console.log('🚀 ~ afterAll ~ file:', file);
+  console.log('🚀 ~ afterAll ~ tasks:', tasks);
 });

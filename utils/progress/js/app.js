@@ -1,34 +1,59 @@
+const CORE_MODULE = 'core';
+const REACT_MODULE = 'react';
+
 const LEVEL_DEFINITIONS = {
-  '000': { name: 'Wstęp', level: 0 },
-  121: { name: 'Tajniki kompilatora', level: 1 },
-  122: { name: 'Tajniki kompilatora', level: 1 },
-  211: { name: 'System typów', level: 2 },
-  212: { name: 'System typów', level: 2 },
-  221: { name: 'System typów', level: 2 },
-  231: { name: 'System typów', level: 2 },
-  311: { name: 'Typy generyczne', level: 3 },
-  321: { name: 'Typy generyczne', level: 3 },
-  322: { name: 'Typy generyczne', level: 3 },
-  331: { name: 'Typy generyczne', level: 3 },
-  341: { name: 'Typy generyczne', level: 3 },
-  411: { name: 'Algebra typów', level: 4 },
-  412: { name: 'Algebra typów', level: 4 },
-  421: { name: 'Algebra typów', level: 4 },
-  422: { name: 'Algebra typów', level: 4 },
-  431: { name: 'Algebra typów', level: 4 },
-  441: { name: 'Algebra typów', level: 4 },
-  442: { name: 'Algebra typów', level: 4 },
-  611: { name: 'Wzorce w pracy z typami', level: 6 },
-  621: { name: 'Wzorce w pracy z typami', level: 6 },
-  622: { name: 'Wzorce w pracy z typami', level: 6 },
-  631: { name: 'Wzorce w pracy z typami', level: 6 },
-  632: { name: 'Wzorce w pracy z typami', level: 6 },
-  731: { name: 'JavaScript - Integracje', level: 7 },
+  [CORE_MODULE]: {
+    '000': { name: 'Wstęp', level: 0 },
+    121: { name: 'Tajniki kompilatora', level: 1 },
+    122: { name: 'Tajniki kompilatora', level: 1 },
+    211: { name: 'System typów', level: 2 },
+    212: { name: 'System typów', level: 2 },
+    221: { name: 'System typów', level: 2 },
+    231: { name: 'System typów', level: 2 },
+    311: { name: 'Typy generyczne', level: 3 },
+    321: { name: 'Typy generyczne', level: 3 },
+    322: { name: 'Typy generyczne', level: 3 },
+    331: { name: 'Typy generyczne', level: 3 },
+    341: { name: 'Typy generyczne', level: 3 },
+    411: { name: 'Algebra typów', level: 4 },
+    412: { name: 'Algebra typów', level: 4 },
+    421: { name: 'Algebra typów', level: 4 },
+    422: { name: 'Algebra typów', level: 4 },
+    431: { name: 'Algebra typów', level: 4 },
+    441: { name: 'Algebra typów', level: 4 },
+    442: { name: 'Algebra typów', level: 4 },
+    611: { name: 'Wzorce w pracy z typami', level: 6 },
+    621: { name: 'Wzorce w pracy z typami', level: 6 },
+    622: { name: 'Wzorce w pracy z typami', level: 6 },
+    631: { name: 'Wzorce w pracy z typami', level: 6 },
+    632: { name: 'Wzorce w pracy z typami', level: 6 },
+    731: { name: 'JavaScript - Integracje', level: 7 },
+  },
+  [REACT_MODULE]: {
+    '000': { name: 'Wstęp', level: 0 },
+    211: { name: 'Hooki', level: 2 },
+  },
 };
 
-async function fetchResults() {
+async function initDashboard() {
+  const [coreResults, reactResults] = await Promise.all([
+    fetchResults(CORE_MODULE),
+    fetchResults(REACT_MODULE),
+  ]);
+
+  if (!coreResults || !reactResults) return;
+
+  renderOverallProgress(coreResults, reactResults);
+  renderChallenges(coreResults, CORE_MODULE);
+  renderChallenges(reactResults, REACT_MODULE);
+}
+
+// Initialize the dashboard when the page loads
+document.addEventListener('DOMContentLoaded', initDashboard);
+
+async function fetchResults(module) {
   try {
-    const response = await fetch('../data/results.json');
+    const response = await fetch(`../data/results-${module}.json`);
     return await response.json();
   } catch (error) {
     console.error('Error fetching results:', error);
@@ -36,12 +61,13 @@ async function fetchResults() {
   }
 }
 
-function renderOverallProgress(results) {
-  const challenges = getAllChallenges(results);
-  const completedChallenges = challenges.filter(
-    (challenge) => challenge.status === 'complete',
-  ).length;
-  const totalChallenges = challenges.length;
+function renderOverallProgress(coreResults, reactResults) {
+  const coreStats = getChallengeStats(coreResults, CORE_MODULE);
+  const reactStats = getChallengeStats(reactResults, REACT_MODULE);
+
+  const completedChallenges = coreStats.completed + reactStats.completed;
+  const totalChallenges = coreStats.total + reactStats.total;
+
   const progressPercentage = Math.round((completedChallenges / totalChallenges) * 100);
 
   const progressHtml = `
@@ -64,6 +90,57 @@ function renderOverallProgress(results) {
   `;
 
   document.getElementById('overall-progress').innerHTML = progressHtml;
+}
+
+function getChallengeStats(results, moduleName) {
+  const challenges = getAllChallenges(results, moduleName);
+  const completedChallenges = challenges.filter(
+    (challenge) => challenge.status === 'complete',
+  ).length;
+
+  return {
+    challenges,
+    completed: completedChallenges,
+    total: challenges.length,
+  };
+}
+
+function getAllChallenges(results, moduleName) {
+  const challenges = [];
+
+  results.testResults.forEach((suite) => {
+    const levelCode = getChallengeLevel(suite.name);
+    if (levelCode && LEVEL_DEFINITIONS[moduleName][levelCode]) {
+      const levelInfo = LEVEL_DEFINITIONS[moduleName][levelCode];
+      const testDetails = getTestDetails(suite);
+      const passedTests = testDetails.filter((test) => test.status === 'passed').length;
+      const totalTests = testDetails.length;
+
+      challenges.push({
+        name: suite.name
+          .split('/')
+          .pop()
+          .replace(/\.spec\.tsx?$/, ''),
+        level: levelInfo.level,
+        levelName: levelInfo.name,
+        levelCode,
+        passedTests,
+        totalTests,
+        status:
+          passedTests === totalTests ? 'complete' : passedTests > 0 ? 'partial' : 'incomplete',
+        testDetails,
+      });
+    }
+  });
+
+  return challenges.sort((a, b) => {
+    // First sort by level number
+    if (a.level !== b.level) {
+      return a.level - b.level;
+    }
+    // Then by level code for challenges within same level
+    return Number(a.levelCode) - Number(b.levelCode);
+  });
 }
 
 function getChallengeLevel(testName) {
@@ -89,85 +166,9 @@ function getTestDetails(suite) {
   }));
 }
 
-function getAllChallenges(results) {
-  const challenges = [];
-
-  results.testResults.forEach((suite) => {
-    const levelCode = getChallengeLevel(suite.name);
-    if (levelCode && LEVEL_DEFINITIONS[levelCode]) {
-      const levelInfo = LEVEL_DEFINITIONS[levelCode];
-      const testDetails = getTestDetails(suite);
-      const passedTests = testDetails.filter((test) => test.status === 'passed').length;
-      const totalTests = testDetails.length;
-
-      challenges.push({
-        name: suite.name.split('/').pop().replace('.spec.ts', ''),
-        level: levelInfo.level,
-        levelName: levelInfo.name,
-        levelCode,
-        passedTests,
-        totalTests,
-        status:
-          passedTests === totalTests ? 'complete' : passedTests > 0 ? 'partial' : 'incomplete',
-        testDetails,
-      });
-    }
-  });
-
-  return challenges.sort((a, b) => {
-    // First sort by level number
-    if (a.level !== b.level) {
-      return a.level - b.level;
-    }
-    // Then by level code for challenges within same level
-    return Number(a.levelCode) - Number(b.levelCode);
-  });
-}
-
-function getStatusColor(status) {
-  switch (status) {
-    case 'complete':
-      return 'border-lime-500/10 text-lime-400 bg-lime-950/50 hover:bg-lime-950/80';
-    case 'partial':
-      return 'border-orange-500/10 text-orange-400 bg-orange-950/50 hover:bg-orange-950/80';
-    case 'incomplete':
-      return 'border-slate-500/10 text-slate-400 bg-slate-950/50 hover:bg-slate-950/80';
-    default:
-      return 'border-slate-500/10 text-slate-400 bg-slate-950/50 hover:bg-slate-950/80';
-  }
-}
-
-function getStatusIcon(status) {
-  switch (status) {
-    case 'complete':
-      return `<svg class="w-4 h-4 text-lime-400" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-      </svg>`;
-    case 'partial':
-      return `<svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
-      </svg>`;
-    default:
-      return `<svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd"/>
-      </svg>`;
-  }
-}
-
-function toggleTestDetails(cardId) {
-  const detailsElement = document.getElementById(`details-${cardId}`);
-  const isExpanded = detailsElement.classList.contains('hidden');
-
-  if (isExpanded) {
-    detailsElement.classList.remove('hidden');
-  } else {
-    detailsElement.classList.add('hidden');
-  }
-}
-
-function renderChallenges(results) {
-  const container = document.getElementById('levels');
-  const challenges = getAllChallenges(results);
+function renderChallenges(results, moduleName) {
+  const container = document.getElementById(`levels-${moduleName}`);
+  const challenges = getAllChallenges(results, moduleName);
 
   const gridHtml = `
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -227,13 +228,43 @@ function renderChallenges(results) {
   container.innerHTML = gridHtml;
 }
 
-async function initDashboard() {
-  const results = await fetchResults();
-  if (!results) return;
-
-  renderOverallProgress(results);
-  renderChallenges(results);
+function getStatusColor(status) {
+  switch (status) {
+    case 'complete':
+      return 'border-lime-500/10 text-lime-400 bg-lime-950/50 hover:bg-lime-950/80';
+    case 'partial':
+      return 'border-orange-500/10 text-orange-400 bg-orange-950/50 hover:bg-orange-950/80';
+    case 'incomplete':
+      return 'border-slate-500/10 text-slate-400 bg-slate-950/50 hover:bg-slate-950/80';
+    default:
+      return 'border-slate-500/10 text-slate-400 bg-slate-950/50 hover:bg-slate-950/80';
+  }
 }
 
-// Initialize the dashboard when the page loads
-document.addEventListener('DOMContentLoaded', initDashboard);
+function getStatusIcon(status) {
+  switch (status) {
+    case 'complete':
+      return `<svg class="w-4 h-4 text-lime-400" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>`;
+    case 'partial':
+      return `<svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+      </svg>`;
+    default:
+      return `<svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd"/>
+      </svg>`;
+  }
+}
+
+function toggleTestDetails(cardId) {
+  const detailsElement = document.getElementById(`details-${cardId}`);
+  const isExpanded = detailsElement.classList.contains('hidden');
+
+  if (isExpanded) {
+    detailsElement.classList.remove('hidden');
+  } else {
+    detailsElement.classList.add('hidden');
+  }
+}
