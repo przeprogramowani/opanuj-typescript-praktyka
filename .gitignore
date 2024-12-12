@@ -4,3 +4,5 @@ dist
 .env
 html
 utils/progress/data/results.json
+utils/progress/data/results-react.json
+utils/progress/data/results-core.json
