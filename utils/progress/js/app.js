@@ -3,35 +3,23 @@ const REACT_MODULE = 'react';
 
 const LEVEL_DEFINITIONS = {
   [CORE_MODULE]: {
-    '000': { name: 'Wstęp', level: 0 },
-    121: { name: 'Tajniki kompilatora', level: 1 },
-    122: { name: 'Tajniki kompilatora', level: 1 },
-    211: { name: 'System typów', level: 2 },
-    212: { name: 'System typów', level: 2 },
-    221: { name: 'System typów', level: 2 },
-    231: { name: 'System typów', level: 2 },
-    311: { name: 'Typy generyczne', level: 3 },
-    321: { name: 'Typy generyczne', level: 3 },
-    322: { name: 'Typy generyczne', level: 3 },
-    331: { name: 'Typy generyczne', level: 3 },
-    341: { name: 'Typy generyczne', level: 3 },
-    411: { name: 'Algebra typów', level: 4 },
-    412: { name: 'Algebra typów', level: 4 },
-    421: { name: 'Algebra typów', level: 4 },
-    422: { name: 'Algebra typów', level: 4 },
-    431: { name: 'Algebra typów', level: 4 },
-    441: { name: 'Algebra typów', level: 4 },
-    442: { name: 'Algebra typów', level: 4 },
-    611: { name: 'Wzorce w pracy z typami', level: 6 },
-    621: { name: 'Wzorce w pracy z typami', level: 6 },
-    622: { name: 'Wzorce w pracy z typami', level: 6 },
-    631: { name: 'Wzorce w pracy z typami', level: 6 },
-    632: { name: 'Wzorce w pracy z typami', level: 6 },
-    731: { name: 'JavaScript - Integracje', level: 7 },
+    0: { name: 'Wstęp', level: 0 },
+    1: { name: 'Tajniki kompilatora', level: 1 },
+    2: { name: 'System typów', level: 2 },
+    3: { name: 'Typy generyczne', level: 3 },
+    4: { name: 'Algebra typów', level: 4 },
+    6: { name: 'Wzorce w pracy z typami', level: 6 },
+    7: { name: 'JavaScript - Integracje', level: 7 },
   },
   [REACT_MODULE]: {
-    '000': { name: 'Wstęp', level: 0 },
-    211: { name: 'Hooki', level: 2 },
+    0: { name: 'Wstęp', level: 0 },
+    1: { name: 'Konfiguracja projektu', level: 1 },
+    2: { name: 'Komponenty', level: 2 },
+    3: { name: 'Hooki', level: 3 },
+    4: { name: 'Zarządzanie stanem', level: 4 },
+    5: { name: 'Komunikacja z backendem', level: 5 },
+    6: { name: 'Wzorce w React', level: 6 },
+    7: { name: 'Aplikacje produkcyjne', level: 7 },
   },
 };
 
@@ -121,8 +109,8 @@ function getAllChallenges(results, moduleName, tracker) {
 
   results.testResults.forEach((suite) => {
     const levelCode = getChallengeLevel(suite.name);
-    if (levelCode && LEVEL_DEFINITIONS[moduleName][levelCode]) {
-      const levelInfo = LEVEL_DEFINITIONS[moduleName][levelCode];
+    if (levelCode && LEVEL_DEFINITIONS[moduleName][levelCode[0]]) {
+      const levelInfo = LEVEL_DEFINITIONS[moduleName][levelCode[0]];
       const testDetails = getTestDetails(suite);
       const passedTests = testDetails.filter((test) => test.status === 'passed').length;
       const totalTests = testDetails.length;
