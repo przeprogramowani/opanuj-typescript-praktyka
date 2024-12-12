@@ -1,22 +1,7 @@
 import { Command } from 'commander';
 import { glob } from 'glob';
+import { suppressViteSourceMapWarning } from './scripts/helpers.ts';
 import { startTest } from './scripts/test-runner.ts';
-
-function suppressViteSourceMapWarning(callback: () => Promise<void>) {
-  const stderrWrite = process.stderr.write;
-  process.stderr.write = function (chunk: any, ...args: any[]) {
-    const output = chunk.toString();
-    if (output.includes('Failed to load source map') || output.includes('ENOENT')) {
-      return true;
-    }
-    return stderrWrite.call(process.stderr, chunk, ...args.slice(0, 2));
-  };
-
-  return callback().finally(() => {
-    // Restore original stderr
-    process.stderr.write = stderrWrite;
-  });
-}
 
 const program = new Command();
 
@@ -40,7 +25,6 @@ program
         process.exit(1);
       }
 
-      // Wrap the test execution with the suppression function
       await suppressViteSourceMapWarning(() =>
         startTest(`${allPaths[0]}`, { watch: options.watch }),
       );
