@@ -2,8 +2,8 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
 
 import { cleanup } from '@testing-library/react';
-import { afterEach, expect } from 'vitest';
-import { toConfirmCompilation } from './helpers.ts';
+import { afterAll, afterEach, expect, RunnerTask } from 'vitest';
+import { toConfirmCompilation, trackVerify } from './helpers.ts';
 
 expect.extend({
   toConfirmCompilation,
@@ -11,4 +11,8 @@ expect.extend({
 
 afterEach(() => {
   cleanup();
+});
+
+afterAll(({ tasks }: { tasks: RunnerTask[] }) => {
+  trackVerify('react', tasks);
 });

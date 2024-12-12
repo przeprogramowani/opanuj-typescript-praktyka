@@ -40,12 +40,13 @@ async function initDashboard() {
     fetchResults(CORE_MODULE),
     fetchResults(REACT_MODULE),
   ]);
+  const tracker = await fetchTracker();
 
   if (!coreResults || !reactResults) return;
 
-  renderOverallProgress(coreResults, reactResults);
-  renderChallenges(coreResults, CORE_MODULE);
-  renderChallenges(reactResults, REACT_MODULE);
+  renderOverallProgress(coreResults, reactResults, tracker);
+  renderChallenges(coreResults, CORE_MODULE, tracker);
+  renderChallenges(reactResults, REACT_MODULE, tracker);
 }
 
 // Initialize the dashboard when the page loads
@@ -61,9 +62,19 @@ async function fetchResults(module) {
   }
 }
 
-function renderOverallProgress(coreResults, reactResults) {
-  const coreStats = getChallengeStats(coreResults, CORE_MODULE);
-  const reactStats = getChallengeStats(reactResults, REACT_MODULE);
+async function fetchTracker() {
+  try {
+    const response = await fetch(`../data/verify-tracker.json`);
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching verify tracker:', error);
+    return null;
+  }
+}
+
+function renderOverallProgress(coreResults, reactResults, tracker) {
+  const coreStats = getChallengeStats(coreResults, CORE_MODULE, tracker);
+  const reactStats = getChallengeStats(reactResults, REACT_MODULE, tracker);
 
   const completedChallenges = coreStats.completed + reactStats.completed;
   const totalChallenges = coreStats.total + reactStats.total;
@@ -92,8 +103,8 @@ function renderOverallProgress(coreResults, reactResults) {
   document.getElementById('overall-progress').innerHTML = progressHtml;
 }
 
-function getChallengeStats(results, moduleName) {
-  const challenges = getAllChallenges(results, moduleName);
+function getChallengeStats(results, moduleName, tracker) {
+  const challenges = getAllChallenges(results, moduleName, tracker);
   const completedChallenges = challenges.filter(
     (challenge) => challenge.status === 'complete',
   ).length;
@@ -105,7 +116,7 @@ function getChallengeStats(results, moduleName) {
   };
 }
 
-function getAllChallenges(results, moduleName) {
+function getAllChallenges(results, moduleName, tracker) {
   const challenges = [];
 
   results.testResults.forEach((suite) => {
@@ -116,18 +127,23 @@ function getAllChallenges(results, moduleName) {
       const passedTests = testDetails.filter((test) => test.status === 'passed').length;
       const totalTests = testDetails.length;
 
+      const challengeName = suite.name
+        .split('/')
+        .pop()
+        .replace(/\.spec\.tsx?$/, '');
+
       challenges.push({
-        name: suite.name
-          .split('/')
-          .pop()
-          .replace(/\.spec\.tsx?$/, ''),
+        name: challengeName,
         level: levelInfo.level,
         levelName: levelInfo.name,
         levelCode,
         passedTests,
         totalTests,
-        status:
-          passedTests === totalTests ? 'complete' : passedTests > 0 ? 'partial' : 'incomplete',
+        status: getChallengeStatus(
+          { challengeName, moduleName },
+          { totalTests, passedTests },
+          tracker,
+        ),
         testDetails,
       });
     }
@@ -141,6 +157,18 @@ function getAllChallenges(results, moduleName) {
     // Then by level code for challenges within same level
     return Number(a.levelCode) - Number(b.levelCode);
   });
+}
+
+function getChallengeStatus(challenge, tests, tracker) {
+  const moduleName = challenge.moduleName;
+  const challengeName = challenge.challengeName;
+  const challengeInTracker = tracker && tracker[moduleName][challengeName];
+
+  return tests.passedTests === tests.totalTests
+    ? 'complete'
+    : tests.passedTests > 0 && challengeInTracker
+      ? 'partial'
+      : 'incomplete';
 }
 
 function getChallengeLevel(testName) {
@@ -166,9 +194,9 @@ function getTestDetails(suite) {
   }));
 }
 
-function renderChallenges(results, moduleName) {
+function renderChallenges(results, moduleName, tracker) {
   const container = document.getElementById(`levels-${moduleName}`);
-  const challenges = getAllChallenges(results, moduleName);
+  const challenges = getAllChallenges(results, moduleName, tracker);
 
   const gridHtml = `
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
