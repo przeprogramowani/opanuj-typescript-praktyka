@@ -10,7 +10,6 @@ function getTaskName(pathToTask: string) {
 
 async function runVitest(pathToTask: string, options: TestOptions) {
   const isReactTask = pathToTask.includes('react');
-
   const vitest = await startVitest('test', [pathToTask], {
     run: !options.watch,
     watch: options.watch,

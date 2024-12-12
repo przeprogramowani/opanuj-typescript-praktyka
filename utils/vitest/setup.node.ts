@@ -1,19 +1,6 @@
 import { afterAll, expect } from 'vitest';
+import { toConfirmCompilation } from './helpers.ts';
 
 expect.extend({
-  toConfirmCompilation(received: string[]) {
-    const { isNot } = this;
-    return {
-      pass: received.length === 0,
-      message: () =>
-        isNot
-          ? '\n🚨 Oczekiwano błędów kompilacji - upewnij się, że typy są odpowiednio zdefiniowane.'
-          : `\n🚨 Wykryto następujące błędy kompilacji:\n\n${received.join('\n')}\n`,
-    };
-  },
-});
-
-afterAll(({ file, tasks }) => {
-  console.log('🚀 ~ afterAll ~ file:', file);
-  console.log('🚀 ~ afterAll ~ tasks:', tasks);
+  toConfirmCompilation,
 });

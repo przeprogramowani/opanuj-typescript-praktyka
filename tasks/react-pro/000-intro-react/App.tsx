@@ -8,7 +8,7 @@ const App = () => {
   };
 
   return (
-    <div className="p-4 text-center text-3xl">
+    <div className="p-4 text-3xl text-center">
       <h1>Welcome to 000-intro</h1>
       <p>Current count: {count}</p>
       <button onClick={handleIncrement}>Increment</button>

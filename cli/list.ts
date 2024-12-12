@@ -1,23 +1,23 @@
 import { Command } from 'commander';
 import { glob } from 'glob';
+import { sep } from 'path';
 import prompts from 'prompts';
 import { startTest } from './scripts/test-runner.ts';
-import { sep } from 'path';
 
 const program = new Command();
 
 program
   .name('list')
   .description('Uruchamianie zadań z wybranego modułu')
-  .argument('[course]', 'Nazwa modułu', 'core-pro')
+  .argument('[module]', 'Nazwa modułu', 'core-pro')
   .option('-w, --watch', 'Uruchamia testy w trybie obserwatora', false)
-  .action(async (course: string, options: { watch: boolean }) => {
+  .action(async (module: string, options: { watch: boolean }) => {
     try {
-      const coursePath = `tasks/${course}/*`;
-      const folders = await glob(coursePath, { mark: false, nodir: false });
+      const modulePath = `tasks/${module}/*`;
+      const folders = await glob(modulePath, { mark: false, nodir: false });
 
       if (folders.length === 0) {
-        console.error(`👉 Nie znaleziono modułu o nazwie "${course}"`);
+        console.error(`👉 Nie znaleziono modułu o nazwie "${module}"`);
         process.exit(1);
       }
 
@@ -38,7 +38,7 @@ program
         process.exit(1);
       }
 
-      await startTest(`tasks/${course}/${task}`, { watch: options.watch });
+      await startTest(`tasks/${module}/${task}`, { watch: options.watch });
     } catch (error) {
       console.error(`\n❌ Nieoczekiwany błąd :(\n\n ${error}`);
       process.exit(1);
