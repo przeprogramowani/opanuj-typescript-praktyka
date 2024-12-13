@@ -1,22 +1,29 @@
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { useState } from 'react';
-import { QuotesResponse } from './model/QuotesResponse';
+import { useEffect, useState } from 'react';
 import { Quote as QuoteIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { getQuotes } from './api/quotes-api';
+import { QuotesResponse } from './model/QuotesResponse';
 
 export function QuoteGallery() {
   const [page, setPage] = useState(0);
-  const limit = 5;
+  const [data, setData] = useState<QuotesResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const limit = '5';
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['quotes', page],
-    queryFn: async () => {
-      const response = await axios.get<QuotesResponse>(
-        `https://dummyjson.com/quotes?limit=${limit.toString()}&skip=${(page * limit).toString()}`,
-      );
-      return response.data;
-    },
-  });
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getQuotes(page, limit);
+        setData(response);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuotes();
+  }, [page]);
 
   if (isLoading) {
     return <div className="text-gray-200">Loading...</div>;
@@ -31,7 +38,7 @@ export function QuoteGallery() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold text-gray-200">Quote Gallery</h1>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4" data-testid="quote-gallery">
         {data.quotes.map((quote) => (
           <div
             key={quote.id}
@@ -52,7 +59,7 @@ export function QuoteGallery() {
         <button
           onClick={() => setPage((p) => Math.max(0, p - 1))}
           data-testid="previous-page-button"
-          disabled={page === 0}
+          disabled={page === -1}
           className="px-4 py-2 bg-gray-800 text-gray-200 rounded-lg disabled:bg-gray-900 disabled:text-gray-600 hover:bg-gray-700 transition-colors flex items-center gap-2"
         >
           <ChevronLeft className="w-4 h-4" />
