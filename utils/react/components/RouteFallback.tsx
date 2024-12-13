@@ -8,10 +8,10 @@ export default function RouteFallback({ exerciseName }: RouteFallbackProps) {
   return (
     <div>
       <h2 className="flex items-center gap-2 text-lg font-bold">
-        <Wrench className="w-4 h-4" /> Projekt "{exerciseName}" nie może zostać uruchomiony.
+        <Wrench className="w-4 h-4" /> Projekt "{exerciseName}" nie został ukończony.
       </h2>
       <p className="mb-8">
-        Upewnij się, że ukończyłeś implementację - w razie potrzeby wykorzystaj testy lub dodaj
+        Upewnij się, że twoja implementacja działa - w razie potrzeby wykorzystaj testy lub dodaj
         wątek na O:TS Forum.
       </p>
       <Link className="text-blue-400" to="/">
