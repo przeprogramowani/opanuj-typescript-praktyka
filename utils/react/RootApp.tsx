@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router';
+import { Code2 } from 'lucide-react';
 
 type RootAppProps = {
   routes: { path: string; exerciseName: string }[];
@@ -7,6 +8,9 @@ type RootAppProps = {
 const RootApp = ({ routes }: RootAppProps) => {
   return (
     <nav>
+      <h1 className="text-lg lg:text-3xl font-bold mb-4 flex items-center gap-2">
+        <Code2 className="w-8 h-8" /> Wybierz projekt
+      </h1>
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {routes.map(({ exerciseName }) => (
           <li key={exerciseName} className="w-full text-center">
