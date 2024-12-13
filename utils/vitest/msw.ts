@@ -31,6 +31,16 @@ const restHandlers = [
     }),
   ),
 
+  http.get('https://dummyjson.com/quotes', ({ request }) => {
+    const queryParams = getQueryParams(request.url);
+    return HttpResponse.json({
+      quotes: [],
+      total: 50,
+      skip: parseInt(queryParams.skip),
+      limit: parseInt(queryParams.limit),
+    });
+  }),
+
   http.post('http://localhost:3000/api/tracker', () => {
     return HttpResponse.json({
       success: true,
@@ -40,14 +50,33 @@ const restHandlers = [
 
 export function setupMockServer() {
   const server = setupServer(...restHandlers);
+  let requestLog: Request[] = [];
+
+  server.events.on('request:start', async ({ request }) => {
+    requestLog.push(request);
+  });
+
+  const verifyRequest = (requestUrl: string, requestMethod: string) => {
+    return requestLog.some(
+      (request) => request.url === requestUrl && request.method === requestMethod,
+    );
+  };
+
+  const verifyRequestCount = (requestUrl: string, requestMethod: string) => {
+    const matchingRequests = requestLog.filter(
+      (request) => request.url === requestUrl && request.method === requestMethod,
+    );
+    return matchingRequests.length;
+  };
+
+  const resetHandlers = () => {
+    server.resetHandlers();
+    requestLog = [];
+  };
 
   beforeAll(() => {
     server.listen({ onUnhandledRequest: 'error' });
     vi.useFakeTimers({ shouldAdvanceTime: true });
-  });
-
-  afterEach(() => {
-    server.resetHandlers();
   });
 
   afterAll(() => {
@@ -55,16 +84,5 @@ export function setupMockServer() {
     vi.useRealTimers();
   });
 
-  const verifyRequest = (requestUrl: string, requestMethod: string) => {
-    const handlers = server.listHandlers();
-    return handlers.some((handler) => {
-      const {
-        isUsed,
-        info: { method, path },
-      } = handler as HttpHandler;
-      return isUsed && method === requestMethod && path === requestUrl;
-    });
-  };
-
-  return { verifyRequest };
+  return { verifyRequest, verifyRequestCount, resetHandlers };
 }
