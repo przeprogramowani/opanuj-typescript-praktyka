@@ -44,8 +44,8 @@ const restHandlers = [
   http.get('https://swapi.dev/api/starships', () => {
     return HttpResponse.json({
       count: 1,
-      next: null,
-      previous: null,
+      next: 'https://swapi.dev/api/starships?page=2',
+      previous: 'https://swapi.dev/api/starships?page=1',
       results: [
         {
           name: 'CR90 corvette',
@@ -78,7 +78,11 @@ const restHandlers = [
   }),
 ];
 
-export function setupMockServer({ logRequest = false }: { logRequest?: boolean } = {}) {
+interface SetupMockServerOptions {
+  logRequest?: boolean;
+}
+
+export function setupMockServer({ logRequest = false }: SetupMockServerOptions = {}) {
   const server = setupServer(...restHandlers);
   let requestLog: Request[] = [];
 

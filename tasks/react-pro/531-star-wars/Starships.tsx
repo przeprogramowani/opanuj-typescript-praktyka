@@ -1,11 +1,12 @@
 import { AlertCircle, ChevronLeft, ChevronRight, Loader, Rocket } from 'lucide-react';
-import { useGetStarships } from './generated/swapi-client';
 import { StarshipCard } from './StarshipCard';
 import { useState } from 'react';
 
 export default function Starships() {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isError } = useGetStarships({ page });
+  const [data] = useState(null);
+  const [isLoading] = useState(false);
+  const [isError] = useState(false);
 
   if (isLoading) {
     return (
@@ -47,6 +48,7 @@ export default function Starships() {
       <div className="flex justify-center gap-4 mt-8">
         <button
           onClick={() => setPage(page - 1)}
+          data-testid="previous-button"
           disabled={!hasPrevPage}
           className="flex items-center px-4 py-2 bg-blue-500 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed min-w-48"
         >
@@ -56,6 +58,7 @@ export default function Starships() {
         <button
           onClick={() => setPage(page + 1)}
           disabled={!hasNextPage}
+          data-testid="next-button"
           className="flex items-center px-4 py-2 bg-blue-500 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed min-w-48"
         >
           Next
