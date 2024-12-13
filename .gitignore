@@ -7,3 +7,4 @@ utils/progress/data/results.json
 utils/progress/data/results-react.json
 utils/progress/data/results-core.json
 utils/progress/data/verify-tracker.json
+tasks/**/*/generated
