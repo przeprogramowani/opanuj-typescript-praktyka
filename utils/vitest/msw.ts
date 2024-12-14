@@ -1,6 +1,6 @@
 import { setupServer } from 'msw/node';
-import { http, HttpResponse, HttpHandler, delay } from 'msw';
-import { vi, beforeAll, afterAll, afterEach } from 'vitest';
+import { http, HttpResponse, delay } from 'msw';
+import { vi, beforeAll, afterAll } from 'vitest';
 
 const getQueryParams = (url: string): Record<string, string> => {
   const searchParams = new URL(url).searchParams;
@@ -38,6 +38,22 @@ const restHandlers = [
       total: 50,
       skip: parseInt(queryParams.skip),
       limit: parseInt(queryParams.limit),
+    });
+  }),
+
+  http.get('https://swapi.dev/api/planets', ({ request }) => {
+    return HttpResponse.json({
+      count: 1,
+      next: null,
+      previous: null,
+      results: [
+        {
+          name: 'Tatooine',
+          rotation_period: '23',
+          orbital_period: '304',
+          diameter: '10465',
+        },
+      ],
     });
   }),
 
