@@ -3,7 +3,7 @@ import { join } from 'path';
 import { describe, test } from 'vitest';
 import { getCompilerDiagnostics } from '../../../utils/ts-utils.ts';
 
-describe('Three children', () => {
+describe('Event typing', () => {
   test('should compile without errors', () => {
     const diagnostics = getCompilerDiagnostics(join(__dirname, 'App.tsx'));
     expect(diagnostics).toConfirmCompilation();
