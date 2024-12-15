@@ -18,4 +18,6 @@ const App = () => (
   </FlexibleContainer>
 );
 
-export { App, FlexibleContainer };
+export default App;
+
+export { FlexibleContainer };

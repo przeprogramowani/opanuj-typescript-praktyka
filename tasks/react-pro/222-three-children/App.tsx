@@ -12,4 +12,6 @@ const App = () => (
   </TripleContainer>
 );
 
-export { App, TripleContainer };
+export default App;
+
+export { TripleContainer };
