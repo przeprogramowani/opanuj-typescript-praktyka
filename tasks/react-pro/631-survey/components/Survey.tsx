@@ -11,7 +11,10 @@ const Survey = ({ children, onSubmit }: SurveyProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.(values);
+    if (!onSubmit) {
+      throw new Error('onSubmit callback is required!');
+    }
+    onSubmit(values);
   };
 
   return (
