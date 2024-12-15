@@ -15,7 +15,7 @@
     "raport:html:serve": "vite preview --outDir html --port 3100",
     "summary": "npm run raport:json && npm run raport:json:serve",
     "summary:vitest": "npm run raport:html && npm run raport:html:serve",
-    "_internal:test": "vitest --run tasks/core-pro/000-intro"
+    "_internal:test": "npm run verify 000-intro && npm run verify 000-intro-react"
   },
   "author": "Przeprogramowani",
   "license": "ISC",
@@ -36,6 +36,7 @@
     "jsdom": "^25.0.1",
     "msw": "2.6.8",
     "open": "10.1.0",
+    "orval": "7.3.0",
     "postcss": "^8.4.49",
     "prettier": "3.3.3",
     "prompts": "2.4.2",
@@ -52,6 +53,7 @@
     "lucide-react": "0.468.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-error-boundary": "4.1.2",
     "react-hook-form": "7.54.0",
     "react-router": "7.0.2",
     "zod": "3.24.1"

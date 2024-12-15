@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import './index.css';
 import RootApp from './RootApp';
+import { ErrorBoundary } from 'react-error-boundary';
+import RouteFallback from './components/RouteFallback';
 
 // Dynamically import all App.tsx files within tasks/react-pro
 const modules = import.meta.glob('../../tasks/react-pro/**/App.tsx');
@@ -34,9 +36,11 @@ const dynamicRoutes = exerciseRoutes.map(({ path, exerciseName }) => {
       key={exerciseName}
       path={`/${exerciseName}`}
       element={
-        <Suspense fallback={<div>Loading {exerciseName}...</div>}>
-          <Component />
-        </Suspense>
+        <ErrorBoundary fallback={<RouteFallback exerciseName={exerciseName} />}>
+          <Suspense fallback={<div>Loading {exerciseName}...</div>}>
+            <Component />
+          </Suspense>
+        </ErrorBoundary>
       }
     />
   );
