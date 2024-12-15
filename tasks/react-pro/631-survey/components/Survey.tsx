@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { FormContext } from './context';
+import { SurveyContext } from './context';
 import { SurveyProps } from './types';
-import { ShortAnswer } from './controls/ShortAnswer';
-import { LongAnswer } from './controls/LongAnswer';
-import { Choice } from './controls/Choice';
-import { Submit } from './controls/Submit';
 
 const Survey = ({ children, onSubmit }: SurveyProps) => {
   const [values, setValues] = useState<Record<string, any>>({});
@@ -18,17 +14,12 @@ const Survey = ({ children, onSubmit }: SurveyProps) => {
   };
 
   return (
-    <FormContext.Provider value={{ handleSubmit, values, setValues }}>
+    <SurveyContext.Provider value={{ handleSubmit, values, setValues }}>
       <form onSubmit={handleSubmit} className="w-full space-y-6">
         {children}
       </form>
-    </FormContext.Provider>
+    </SurveyContext.Provider>
   );
 };
-
-Survey.ShortAnswer = ShortAnswer;
-Survey.LongAnswer = LongAnswer;
-Survey.Choice = Choice;
-Survey.Submit = Submit;
 
 export default Survey;

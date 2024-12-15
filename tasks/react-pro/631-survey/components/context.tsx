@@ -1,12 +1,12 @@
 import { createContext, useContext } from 'react';
-import { FormContextType } from './types';
+import { SurveyContextType } from './types';
 
-export const FormContext = createContext<FormContextType | undefined>(undefined);
+export const SurveyContext = createContext<SurveyContextType | undefined>(undefined);
 
-export const useFormContext = () => {
-  const context = useContext(FormContext);
+export const useSurveyContext = () => {
+  const context = useContext(SurveyContext);
   if (!context) {
-    throw new Error('Form controls must be used within a Form component');
+    throw new Error('Survey controls must be used within a Survey component');
   }
   return context;
 };
