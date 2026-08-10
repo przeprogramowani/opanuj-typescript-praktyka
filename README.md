@@ -4,7 +4,7 @@
 
 ## Wymagania
 
-- Node.js 20
+- Node.js 22.22.2, 24.15+ albo 26+ (rekomendowana wersja z `.nvmrc`)
 
 ## Instalacja bibliotek
 
@@ -58,4 +58,14 @@ Podgląd szczegółów testów:
 
 ```bash
 npm run summary:vitest
+```
+
+### 🛰️ Generowanie klientów API dla zadania 531-star-wars
+
+Zadanie `531-star-wars` korzysta z klientów wygenerowanych przez `orval` na podstawie
+specyfikacji OpenAPI. Katalog `generated` nie jest wersjonowany, więc po świeżym klonie
+repozytorium wygeneruj go raz:
+
+```bash
+npm run generate:star-wars
 ```

@@ -10,8 +10,9 @@ export function useDalle() {
     setCanGenerateImage(!!apiKey);
   }, []);
 
+  // Orval 8 generuje klienta opartego o `fetch`, więc opcje przekazujemy przez `fetch`.
   const { mutate: generateImage } = usePostImagesGenerations({
-    axios: {
+    fetch: {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('OPENAI_API_KEY')}`,
       },
@@ -30,7 +31,10 @@ export function useDalle() {
       },
       {
         onSuccess: (response) => {
-          setImage(response.data.data?.[0]?.url ?? null);
+          // Orval 8 zwraca union odpowiedzi (200/400/401), więc zawężamy po `status`.
+          if (response.status === 200) {
+            setImage(response.data.data?.[0]?.url ?? null);
+          }
         },
       },
     );

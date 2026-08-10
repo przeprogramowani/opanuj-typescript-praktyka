@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Planet, SWAPIResponse } from '../types';
 
-interface PlanetsGridProps<> {}
+// TODO: Uzupełnij propsy (w razie potrzeby dodaj parametr generyczny):
+// `as` (element opakowujący), `columns` (liczba kolumn) oraz `children` (render prop).
+interface PlanetsGridProps {}
 
 export function PlanetsGrid({}: PlanetsGridProps) {
   const [planets, setPlanets] = useState<Planet[]>([]);

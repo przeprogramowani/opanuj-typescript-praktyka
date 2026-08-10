@@ -5,7 +5,7 @@
 */
 
 import { useRef, useState } from 'react';
-import { fixedForwardRef } from './fixed-foward-ref';
+import { fixedForwardRef } from './fixed-forward-ref';
 
 const FormComponent = fixedForwardRef((props: any, ref) => {
   return (

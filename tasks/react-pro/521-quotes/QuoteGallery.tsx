@@ -45,7 +45,7 @@ export function QuoteGallery() {
             className="p-6 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 transition-colors shadow-lg"
           >
             <div className="flex gap-3 items-start">
-              <QuoteIcon className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
+              <QuoteIcon className="w-5 h-5 text-blue-400 shrink-0 mt-1" />
               <div>
                 <p className="text-lg italic text-gray-200">"{quote.quote}"</p>
                 <p className="text-sm text-gray-400 mt-2">- {quote.author}</p>

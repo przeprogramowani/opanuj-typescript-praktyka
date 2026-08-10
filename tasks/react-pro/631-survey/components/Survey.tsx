@@ -14,11 +14,11 @@ const Survey = ({ children, onSubmit }: SurveyProps) => {
   };
 
   return (
-    <SurveyContext.Provider value={{ handleSubmit, values, setValues }}>
+    <SurveyContext value={{ handleSubmit, values, setValues }}>
       <form onSubmit={handleSubmit} className="w-full space-y-6">
         {children}
       </form>
-    </SurveyContext.Provider>
+    </SurveyContext>
   );
 };
 
