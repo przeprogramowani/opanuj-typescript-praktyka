@@ -1,3 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* Tailwind v4 wykrywa źródła automatycznie względem katalogu Vite (utils/react),
+   więc zadania spoza tego katalogu wskazujemy jawnie. */
+@source '../../tasks/react-pro/**/*.{js,ts,jsx,tsx}';

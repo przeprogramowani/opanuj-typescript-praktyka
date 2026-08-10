@@ -1,10 +1,10 @@
-import { afterAll, expect, RunnerTask } from 'vitest';
+import { afterAll, expect } from 'vitest';
 import { toConfirmCompilation, trackVerify } from './helpers.ts';
 
 expect.extend({
   toConfirmCompilation,
 });
 
-afterAll(({ tasks }: { tasks: RunnerTask[] }) => {
-  trackVerify('core', tasks);
+afterAll(({}, suite) => {
+  trackVerify('core', suite);
 });
